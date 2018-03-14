@@ -18,8 +18,20 @@ export class FirebaseProvider {
   }
 
   getNames(){
-    let temp = this.firestore.collection('users');
-    console.log(temp);
+    this.firestore.collection('users').ref.get().then(snapShot =>{
+      snapShot.forEach(doc => {
+        console.log(doc.data());
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
   }
+}
 
+interface User {
+  auth_key:String;
+  auth_level:String;
+  name:String;
+  tt:String;
 }
