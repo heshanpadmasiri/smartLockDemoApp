@@ -1,6 +1,6 @@
 {
   "name": "smartLockTest",
-  "app_id": "",
+  "app_id": "901718b3",
   "type": "ionic-angular",
   "integrations": {
     "cordova": {}
