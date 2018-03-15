@@ -13,6 +13,7 @@ import { AuthListner } from '../../Models/AuthListner';
 export class AuthProvider {
 
   authListners = new Array<AuthListner>();
+  clientId:string = 'smart-lock';
 
   constructor(private androidFingerprintAuth: AndroidFingerprintAuth) {
     console.log('Hello AuthProvider Provider');
@@ -32,9 +33,8 @@ export class AuthProvider {
   authenticate(){    
     this.androidFingerprintAuth.isAvailable()
       .then((result)=> {
-        if(result.isAvailable){          // it is available
-
-          this.androidFingerprintAuth.encrypt({ clientId: 'myAppName', username: 'myUsername', password: 'myPassword' })
+        if(result.isAvailable){        // it is available
+          this.androidFingerprintAuth.encrypt({ clientId: this.clientId, username: 'myUsername', password: 'myPassword' })
             .then(result => {
               if (result.withFingerprint) {
                 console.log('Successfully encrypted credentials.');
@@ -63,5 +63,5 @@ export class AuthProvider {
       });
       this.updateListners(false);
   }
-
+  
 }
