@@ -12,6 +12,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { UsersPage} from "../pages/users/users";
 import { ListPage } from '../pages/list/list';
+import { BluetoothPage } from '../pages/bluetooth/bluetooth';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -32,7 +33,8 @@ const firebaseConfig = {
     MyApp,
     HomePage,
     ListPage,
-    UsersPage
+    UsersPage,
+    BluetoothPage
   ],
   imports: [
     BrowserModule,
@@ -46,7 +48,8 @@ const firebaseConfig = {
     MyApp,
     HomePage,
     ListPage,
-    UsersPage
+    UsersPage,
+    BluetoothPage
   ],
   providers: [
     StatusBar,
