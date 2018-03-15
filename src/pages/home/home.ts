@@ -9,8 +9,10 @@ import { FirebaseProvider } from '../../providers/firebase/firebase'
 })
 export class HomePage {
 
+
+
   constructor(public navCtrl: NavController, public firebaseProvider: FirebaseProvider) {
-    firebaseProvider.getNames();
+
   }
 
 }
