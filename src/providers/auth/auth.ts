@@ -15,7 +15,7 @@ export class AuthProvider {
     console.log('Hello AuthProvider Provider');
   }
 
-  authenticate():boolean{
+  async authenticate():Promise<Boolean>{
     this.androidFingerprintAuth.isAvailable()
       .then((result)=> {
         if(result.isAvailable){

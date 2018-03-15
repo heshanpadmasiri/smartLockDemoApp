@@ -10,12 +10,26 @@ import { AuthProvider } from '../../providers/auth/auth'
 })
 export class HomePage {
 
-
+  message:String;
 
   constructor(public navCtrl: NavController,
               public firebaseProvider: FirebaseProvider,
               private authProvider:AuthProvider) {
-    this.authProvider.authenticate();
+    let authenticate:Promise<Boolean> = this.authProvider.authenticate();
+    authenticate
+      .then(result => {
+        console.log(result);
+        if(result){
+          this.message = "Authenticated";
+        } else {
+          this.message = "Authentication failed"
+        }
+      })
+      .catch(err => console.log(err));
+  }
+
+  ionViewDidLoad() {
+    
   }
 
 }
