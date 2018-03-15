@@ -4,32 +4,32 @@ import { NavController } from 'ionic-angular';
 import { FirebaseProvider } from '../../providers/firebase/firebase'
 import { AuthProvider } from '../../providers/auth/auth'
 
+import { AuthListner } from '../../Models/AuthListner';
+
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
-export class HomePage {
+export class HomePage implements AuthListner{
 
   message:String;
+  authenticated:Promise<Boolean>
 
   constructor(public navCtrl: NavController,
               public firebaseProvider: FirebaseProvider,
               private authProvider:AuthProvider) {
-    let authenticate:Promise<Boolean> = this.authProvider.authenticate();
-    authenticate
-      .then(result => {
-        console.log(result);
-        if(result){
-          this.message = "Authenticated";
-        } else {
-          this.message = "Authentication failed"
-        }
-      })
-      .catch(err => console.log(err));
+    this.authProvider.registerListner(this);
+    this.authProvider.authenticate();
+    this.message = "Awaiting authentication";
   }
+  
 
-  ionViewDidLoad() {
-    
+  onAuthChange(authState:boolean){
+    if(authState){
+      this.message = "Authenticated";
+    } else {
+      this.message = "Authentication failed";
+    }
   }
 
 }
