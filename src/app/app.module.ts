@@ -7,6 +7,7 @@ import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireModule } from 'angularfire2';
 
 import { AndroidFingerprintAuth } from '@ionic-native/android-fingerprint-auth'
+import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -55,6 +56,7 @@ const firebaseConfig = {
     StatusBar,
     SplashScreen,
     AndroidFingerprintAuth,
+    BluetoothSerial,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FirebaseProvider,
     AuthProvider

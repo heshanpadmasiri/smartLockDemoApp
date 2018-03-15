@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
+import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
+
 /**
  * Generated class for the BluetoothPage page.
  *
@@ -15,11 +17,28 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class BluetoothPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  discoverdDevices = new Array<String>();
+
+  constructor(
+    public navCtrl: NavController, 
+    public navParams: NavParams,
+    private bluetoothSerial: BluetoothSerial) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad BluetoothPage');
+    
+    this.bluetoothSerial.discoverUnpaired()
+      .then((devices)=>{
+        devices.forEach(device => {
+          this.discoverdDevices.push(device.name);
+        });
+      })
   }
+}
 
+interface BluetoothDevice {
+  class:number,
+  id:string,
+  address:string,
+  name:string
 }
