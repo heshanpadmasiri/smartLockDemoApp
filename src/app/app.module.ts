@@ -6,6 +6,8 @@ import { AngularFirestore, AngularFirestoreModule } from 'angularfire2/firestore
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireModule } from 'angularfire2';
 
+import { AndroidFingerprintAuth } from '@ionic-native/android-fingerprint-auth'
+
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { UsersPage} from "../pages/users/users";
@@ -48,6 +50,7 @@ const firebaseConfig = {
   providers: [
     StatusBar,
     SplashScreen,
+    AndroidFingerprintAuth,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FirebaseProvider
   ]
