@@ -16,6 +16,7 @@ import { ListPage } from '../pages/list/list';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { FirebaseProvider } from '../providers/firebase/firebase';
+import { AuthProvider } from '../providers/auth/auth';
 
 const firebaseConfig = {
   apiKey: "AIzaSyAcqgf58aoclrD1zdgxasygnx7O1Uzapl4",
@@ -52,7 +53,8 @@ const firebaseConfig = {
     SplashScreen,
     AndroidFingerprintAuth,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    FirebaseProvider
+    FirebaseProvider,
+    AuthProvider
   ]
 })
 export class AppModule {}
