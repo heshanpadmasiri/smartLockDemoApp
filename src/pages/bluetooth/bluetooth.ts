@@ -20,8 +20,9 @@ export class BluetoothPage {
   discoverdDevices = new Array<String>();
   pairedDevices = new Array<String>();
   message:String;
+  bluetoothMessageSend:string;
   isConnected:boolean = false;
-  
+  rssi:String;
 
   constructor(
     public navCtrl: NavController, 
@@ -61,9 +62,24 @@ export class BluetoothPage {
   }
 
   onConnectionSuccess(){
-    this.message = 'Connected Successfully'
+    this.message = 'Connected Successfully';
+    this.isConnected = true;
+    this.bluetoothSerial.readRSSI().then(
+      success => this.rssi = success,
+      error => this.rssi = 'error in reading RSSI',
+    );
   }
- 
+
+  onBtnWriteClick(){
+    this.writeBluetooth('test');
+  }
+
+  writeBluetooth(message:string){
+    this.bluetoothSerial.write(message).then(
+      success => this.bluetoothMessageSend = 'successfully written: ' + message,
+      error => this.bluetoothMessageSend = "writing failed due to " +error
+    )
+  } 
 
 }
 

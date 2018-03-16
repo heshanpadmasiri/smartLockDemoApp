@@ -33,5 +33,7 @@
 <button ion-button round (click)="onBtnConnectClick()">Connect</button>
 <div ng-if="isConnected">
   <p>RSSI:{{rssi}}</p>
+  <button ion-button round (click)="onBtnWriteClick()">Send</button>
+  <p>Send Message:{{bluetoothMessageSend}}</p>
 </div>
 </ion-content>
