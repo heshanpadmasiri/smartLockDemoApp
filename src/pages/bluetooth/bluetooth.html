@@ -17,10 +17,21 @@
 
 
 <ion-content padding>
+<h2>Discovered Devices</h2>
 <ul>
-  <li *ngFor="let name of discoverdDevices">
-    {{name}}
+  <li *ngFor="let device of discoverdDevices">
+    {{device}}
+  </li>
+</ul>
+<h2>Paired Devices</h2>
+<ul>
+  <li *ngFor="let device of pairedDevices">
+    {{device}}
   </li>
 </ul>
 <p> {{message}} </p>
+<button ion-button round (click)="onBtnConnectClick()">Connect</button>
+<div ng-if="isConnected">
+  <p>RSSI:{{rssi}}</p>
+</div>
 </ion-content>

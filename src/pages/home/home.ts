@@ -32,7 +32,5 @@ export class HomePage implements AuthListner{
     }
   }
 
-  encrypt(){
-    this.message = this.authProvider.encrypt_auth();
-  }
+
 }

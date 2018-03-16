@@ -18,14 +18,17 @@ import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 export class BluetoothPage {
 
   discoverdDevices = new Array<String>();
+  pairedDevices = new Array<String>();
   message:String;
+  isConnected:boolean = false;
+  
 
   constructor(
     public navCtrl: NavController, 
     public navParams: NavParams,
     private bluetoothSerial: BluetoothSerial) {
       // Ask user to enable bluetooth
-      this.message = 'waiting';
+      this.message = 'no messages';
       this.bluetoothSerial.enable()
         .then((result)=>{})
         .catch((error)=>{});
@@ -35,16 +38,33 @@ export class BluetoothPage {
     this.bluetoothSerial.discoverUnpaired()
       .then((devices)=>{
         devices.forEach(device => {
-          this.discoverdDevices.push(device.name+':'+device.address);
+          let bluetoothDevice = <BluetoothDevice> device;
+          this.discoverdDevices.push(bluetoothDevice.name+':'+bluetoothDevice.address);
         });
       });
+    this.bluetoothSerial.list()
+      .then((devices) => {
+        devices.forEach(device => {
+          let bluetoothDevice = <BluetoothDevice> device;
+          this.pairedDevices.push(bluetoothDevice.name + ':' + bluetoothDevice.address)
+        })
+      })
+  }
+
+  onBtnConnectClick(){
     this.bluetoothSerial.connectInsecure('00:21:13:00:3D:68')
       .subscribe(
-        sucess=> this.message = 'sucess',
-        error => this.message = 'error',
+        success=> this.onConnectionSuccess(),
+        error => this.message = 'Connection Error',
         () => this.message='completed'
       );
   }
+
+  onConnectionSuccess(){
+    this.message = 'Connected Successfully'
+  }
+ 
+
 }
 
 interface BluetoothDevice {
