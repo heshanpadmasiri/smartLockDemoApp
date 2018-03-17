@@ -3,6 +3,8 @@ import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import { FCM } from '@ionic-native/fcm';
+
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { UsersPage} from "../pages/users/users";
@@ -18,7 +20,7 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private fcm: FCM) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -36,6 +38,24 @@ export class MyApp {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+
+      this.fcm.subscribeToTopic('all');
+      this.fcm.getToken().then(token => {
+        // backend.registerToken(token);
+      });
+      this.fcm.onNotification().subscribe(data => {
+        alert('message received')
+        if(data.wasTapped) {
+        console.info("Received in background");
+        } else {
+        console.info("Received in foreground");
+        };
+      });
+      this.fcm.onTokenRefresh().subscribe(token => {
+        // backend.registerToken(token);
+      });
+
+
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });

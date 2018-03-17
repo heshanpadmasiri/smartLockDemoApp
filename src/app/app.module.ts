@@ -6,6 +6,8 @@ import { AngularFirestore, AngularFirestoreModule } from 'angularfire2/firestore
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireModule } from 'angularfire2';
 
+import { FCM } from '@ionic-native/fcm';
+
 import { AndroidFingerprintAuth } from '@ionic-native/android-fingerprint-auth'
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 
@@ -62,7 +64,8 @@ const firebaseConfig = {
     BluetoothSerial,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     FirebaseProvider,
-    AuthProvider
+    AuthProvider,
+    FCM
   ]
 })
 export class AppModule {}
