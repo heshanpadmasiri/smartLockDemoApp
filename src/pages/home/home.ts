@@ -71,7 +71,7 @@ export class HomePage implements AuthListner{
     this.bluetoothSerial.subscribe('\n').subscribe(
       res =>{
         
-        if (res.indexOf('Y')){
+        if (res.indexOf('Y') > -1){
           this.message = 'disconnecting'          
           this.bluetoothSerial.disconnect()
         } else {
