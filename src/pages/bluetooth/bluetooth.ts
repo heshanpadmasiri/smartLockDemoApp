@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 
+
 /**
  * Generated class for the BluetoothPage page.
  *
@@ -20,6 +21,7 @@ export class BluetoothPage {
   discoverdDevices = new Array<String>();
   pairedDevices = new Array<String>();
   message:String;
+  recieved:String;
   bluetoothMessageSend:string;
   isConnected:boolean = false;
   rssi:String;
@@ -56,7 +58,7 @@ export class BluetoothPage {
     this.bluetoothSerial.connectInsecure('00:21:13:00:3D:68')
       .subscribe(
         success=> this.onConnectionSuccess(),
-        error => this.message = 'Connection Error',
+        error => this.message = error,
         () => this.message='completed'
       );
   }
@@ -68,6 +70,11 @@ export class BluetoothPage {
       success => this.rssi = success,
       error => this.rssi = 'error in reading RSSI',
     );
+    this.bluetoothSerial.subscribeRawData().subscribe(
+      data => this.recieved = data,
+      error => this.recieved = error,
+      () => this.recieved = 'completed'
+    )
   }
 
   onBtnWriteClick(){

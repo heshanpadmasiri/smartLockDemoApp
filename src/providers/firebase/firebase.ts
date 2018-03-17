@@ -13,7 +13,11 @@ import { User } from '../../Models/User'
 @Injectable()
 export class FirebaseProvider {
 
+  id:string = '1' // change this for different users
+
   firestore:AngularFirestore;
+
+  attendent:boolean;
 
   constructor(public fs: AngularFirestore) {
     this.firestore = fs;
@@ -23,9 +27,8 @@ export class FirebaseProvider {
     let userArray = new Array<User>();
     this.firestore.collection('users').ref.get().then(snapShot =>{
       snapShot.forEach(doc => {
-
         let temp = doc.data();
-        var newUser = new User(temp.auth_key,temp.auth_level,temp.name,temp.tt);
+        var newUser = new User(temp.auth_key,temp.current_attendance,temp.name,temp.userId);
         userArray.push(newUser);
       });
       //console.log(userArray);
@@ -36,4 +39,24 @@ export class FirebaseProvider {
     });
     return userArray;
   }
+
+  async updateAttendace(){    
+    await this.firestore.collection('users').ref.get().then(snapShoht => {
+      snapShoht.forEach(doc => {
+        let temp = doc.data();        
+        if (temp.userId == this.id){          
+          this.attendent = temp.current_attendance;
+        }        
+      });      
+    })     
+  }
+
+  async isAttended(){
+    await this.updateAttendace();
+
+    return this.attendent;
+  }
+
+
 }
+
