@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
+import { FirebaseProvider } from '../../providers/firebase/firebase'
+import { User } from '../../Models/User';
+
 /**
  * Generated class for the GrantAccessPage page.
  *
@@ -15,7 +18,11 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class GrantAccessPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  users:Array<User>
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public firebaseProvider:FirebaseProvider) {
+    this.users = firebaseProvider.getUsers();
+    console.log(this.users);
   }
 
   ionViewDidLoad() {

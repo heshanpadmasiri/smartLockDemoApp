@@ -22,7 +22,7 @@ export class UsersPage {
   users:Array<User>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public firebaseProvider:FirebaseProvider) {
-    this.users = this.firebaseProvider.getUsers();
+    //this.users = this.firebaseProvider.getUsers();
   }
 
   ionViewDidLoad() {

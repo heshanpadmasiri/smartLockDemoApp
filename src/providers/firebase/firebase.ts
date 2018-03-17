@@ -29,8 +29,13 @@ export class FirebaseProvider {
     this.firestore.collection('users').ref.get().then(snapShot =>{
       snapShot.forEach(doc => {
         let temp = doc.data();
-        var newUser = new User(temp.auth_key,temp.current_attendance,temp.name,temp.userId);
-        userArray.push(newUser);
+        
+        if (temp.userId != this.id){
+          var newUser = new User(temp.name,temp.access_level,temp.img);
+          console.log(temp.name);
+          console.log(newUser);
+          userArray.push(newUser);
+        }        
       });
       //console.log(userArray);
 

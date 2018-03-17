@@ -13,6 +13,14 @@
 </ion-header>
 
 
-<ion-content padding>
-
+<ion-content padding>    
+    <ion-list *ngFor="let user of users">
+        <ion-item>
+          <ion-avatar item-start>
+            <img src="{{user.img}}">
+          </ion-avatar>
+          <h2>{{user.name}}</h2>
+          <p>{{user.access_level}}</p>
+        </ion-item>
+    </ion-list>
 </ion-content>

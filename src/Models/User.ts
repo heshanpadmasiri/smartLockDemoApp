@@ -1,14 +1,14 @@
 export class User{
 
-  constructor(auth_key: String, auth_level: String, name: String, tt: String) {
-    this.auth_key = auth_key;
-    this.auth_level = auth_level;
-    this.name = name;
-    this.tt = tt;
+  name:string;
+  access_level:string;
+  img:string;
+
+  constructor(_name:string,_access_level:string,_img:string) {
+    this.name = _name;
+    this.access_level = _access_level;
+    this.img = _img;
   }
 
-  auth_key:String;
-    auth_level:String;
-    name:String;
-    tt:String;
+  
 }

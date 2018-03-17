@@ -7,7 +7,7 @@ import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { UsersPage} from "../pages/users/users";
 import { BluetoothPage } from '../pages/bluetooth/bluetooth';
-
+import { GrantAccessPage } from '../pages/grant-access/grant-access'
 @Component({
   templateUrl: 'app.html'
 })
@@ -26,7 +26,8 @@ export class MyApp {
       { title: 'Home', component: HomePage },
       { title: 'Users', component:UsersPage},
       { title: 'List', component: ListPage },
-      { title: 'Bluetooth', component:BluetoothPage}
+      { title: 'Bluetooth', component:BluetoothPage},
+      { title: 'Grant Access', component:GrantAccessPage}
     ];
 
   }

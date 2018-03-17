@@ -52,7 +52,8 @@ const firebaseConfig = {
     HomePage,
     ListPage,
     UsersPage,
-    BluetoothPage
+    BluetoothPage,
+    GrantAccessPage
   ],
   providers: [
     StatusBar,
