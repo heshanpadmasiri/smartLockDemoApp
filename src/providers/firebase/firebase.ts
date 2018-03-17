@@ -15,6 +15,8 @@ export class FirebaseProvider {
 
   id:string = '1' // change this for different users
 
+  doorKey:string;
+
   firestore:AngularFirestore;
 
   attendent:boolean;
@@ -57,6 +59,20 @@ export class FirebaseProvider {
     return this.attendent;
   }
 
+  async getDoorKey(mac:string){
+    await this.updateDoorKey(mac);    
+    return this.doorKey;
+  }
 
+  async updateDoorKey(mac:string){
+    await this.firestore.collection('doors').ref.get().then(snapShot => {
+      snapShot.forEach(doc => {
+        let temp = doc.data();
+        if (temp.mac == mac){          
+          this.doorKey = temp.auth_key;          
+        }
+      })
+    })
+  }
 }
 

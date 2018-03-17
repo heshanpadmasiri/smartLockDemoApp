@@ -16,6 +16,7 @@ export class HomePage implements AuthListner{
 
   message:string;
   authenticated:boolean=false;  
+  mac:string='00:21:13:00:3D:68';
 
   constructor(public navCtrl: NavController,
               public firebaseProvider: FirebaseProvider,
@@ -34,6 +35,12 @@ export class HomePage implements AuthListner{
       }
     )  
     this.initiateConnection();  
+    firebaseProvider.getDoorKey(this.mac).then(
+      result => {
+        console.log(result);
+        this.message = result;
+      }
+    )
   }
   
   initiateConnection(){
