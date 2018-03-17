@@ -17,21 +17,24 @@ export class HomePage implements AuthListner{
   message:string;
   authenticated:boolean=false;  
   connected:boolean=false;
-  mac:string='00:21:13:00:3D:68';
+  MACs:Array<string>=['00:21:13:00:3D:68','00:21:13:02:84:C2']
+  index:number=0;
+  mac:string;
 
   constructor(public navCtrl: NavController,
               public firebaseProvider: FirebaseProvider,
               private authProvider:AuthProvider,
               private bluetoothSerial:BluetoothSerial) {
     this.authProvider.registerListner(this);
+    this.mac = this.MACs[this.index];
     setInterval(() => {
       this.initiateConnection();
     },10000)
   }
   
   initiateConnection(){
-    this.message = 'initiating connection';
-    if(this.connected){      
+    this.message = 'initiating connection' + this.mac;
+    if(this.connected || this.index>1){      
       return
     } else {      
       this.bluetoothSerial.connectInsecure(this.mac)
@@ -48,6 +51,8 @@ export class HomePage implements AuthListner{
             this.message = 'disconnecting'          
             this.bluetoothSerial.disconnect()
             this.connected = false
+            this.index += 1;
+            this.mac = this.MACs[this.index];
           } else {
             this.message += "refuse to open:" + res + '--';
             this.connected = false;
@@ -61,8 +66,7 @@ export class HomePage implements AuthListner{
   }
 
   onConnectionSuccess(){    
-    this.connected = true;
-    
+    this.connected = true;    
     this.firebaseProvider.isAttended().then(
       result => {
         if (result){

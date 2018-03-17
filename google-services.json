@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "288496384528",
+    "firebase_url": "https://smartdoorlock-9b19b.firebaseio.com",
+    "project_id": "smartdoorlock-9b19b",
+    "storage_bucket": "smartdoorlock-9b19b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288496384528:android:d0ace247bb23317c",
+        "android_client_info": {
+          "package_name": "com.heshan.smartlockdemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "288496384528-ii56hssu1eecq9tchk0va804vsp03on9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMUofRDe1A7WlNBFVixG-OHJ4St-yfyQM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:288496384528:android:ded063952888a838",
+        "android_client_info": {
+          "package_name": "com.demo.heshan.smartdoordemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "288496384528-l61kvt2amc0vdiujoqv89fprhrfh1qoc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.demo.heshan.smartdoordemo",
+            "certificate_hash": "06274c807cceda2168e27cd3bfbca5ae8d534ddc"
+          }
+        },
+        {
+          "client_id": "288496384528-ii56hssu1eecq9tchk0va804vsp03on9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMUofRDe1A7WlNBFVixG-OHJ4St-yfyQM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "288496384528-ii56hssu1eecq9tchk0va804vsp03on9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
