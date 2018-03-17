@@ -14,6 +14,7 @@ import { HomePage } from '../pages/home/home';
 import { UsersPage} from "../pages/users/users";
 import { ListPage } from '../pages/list/list';
 import { BluetoothPage } from '../pages/bluetooth/bluetooth';
+import { GrantAccessPage } from '../pages/grant-access/grant-access';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -35,7 +36,8 @@ const firebaseConfig = {
     HomePage,
     ListPage,
     UsersPage,
-    BluetoothPage
+    BluetoothPage,
+    GrantAccessPage
   ],
   imports: [
     BrowserModule,

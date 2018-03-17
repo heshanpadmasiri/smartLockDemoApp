@@ -16,39 +16,53 @@ export class HomePage implements AuthListner{
 
   message:string;
   authenticated:boolean=false;  
+  connected:boolean=false;
   mac:string='00:21:13:00:3D:68';
 
   constructor(public navCtrl: NavController,
               public firebaseProvider: FirebaseProvider,
               private authProvider:AuthProvider,
               private bluetoothSerial:BluetoothSerial) {
-    this.authProvider.registerListner(this);    
-    this.message = "Awaiting authentication";
-    firebaseProvider.isAttended().then(
-      result=>{
-        if(result){
-          console.log(result);
-          this.message = "true"
-        } else {
-          this.message = "false"
-        }
-      }
-    ) 
-    setInterval(()=>{
-      this.initiateConnection()
-    },1000); 
+    this.authProvider.registerListner(this);
+    setInterval(() => {
+      this.initiateConnection();
+    },10000)
   }
   
   initiateConnection(){
-    this.bluetoothSerial.connectInsecure(this.mac)
+    this.message = 'initiating connection';
+    if(this.connected){      
+      return
+    } else {      
+      this.bluetoothSerial.connectInsecure(this.mac)
       .subscribe(
         success=> this.onConnectionSuccess(),
-        error => this.message = error,
-        () => this.message='completed'
+        error => {
+          this.message = error },
+        () => {
+          this.message='completed'}
       );
+      this.bluetoothSerial.subscribe('\n').subscribe(
+        res =>{        
+          if (res.indexOf('Y') > -1){
+            this.message = 'disconnecting'          
+            this.bluetoothSerial.disconnect()
+            this.connected = false
+          } else {
+            this.message += "refuse to open:" + res + '--';
+            this.connected = false;
+          }
+        },
+        error => this.message = "error:" + error,
+        () => this.message = 'finished reading'
+      )      
+    }
+    
   }
 
-  onConnectionSuccess(){
+  onConnectionSuccess(){    
+    this.connected = true;
+    
     this.firebaseProvider.isAttended().then(
       result => {
         if (result){
@@ -67,22 +81,11 @@ export class HomePage implements AuthListner{
           this.writeBluetooth(key);
         } else {
           this.message = key + "invalid key"
+          this.connected = false
         }
       }
     )
-    this.bluetoothSerial.subscribe('\n').subscribe(
-      res =>{
-        
-        if (res.indexOf('Y') > -1){
-          this.message = 'disconnecting'          
-          this.bluetoothSerial.disconnect()
-        } else {
-          this.message += "refuse to open:" + res + '--';
-        }
-      },
-      error => this.message = "error:" + error,
-      () => this.message = 'finished reading'
-    )
+    
   }
 
   writeBluetooth(message:string){
