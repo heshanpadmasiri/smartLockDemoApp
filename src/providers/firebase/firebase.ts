@@ -12,7 +12,6 @@ import { User } from '../../Models/User'
 */
 @Injectable()
 export class FirebaseProvider {
-
   id:string = '1' // change this for different users
 
   doorKey:string;
@@ -48,10 +47,19 @@ export class FirebaseProvider {
         let temp = doc.data();        
         if (temp.userId == this.id){          
           this.attendent = temp.current_attendance;
+          if (!temp.current_attendance){
+            // mark him as present
+            let data = {
+              current_attendance:true
+            }
+            doc.ref.update(data);
+          }
         }        
       });      
     })     
   }
+
+
 
   async isAttended(){
     await this.updateAttendace();
