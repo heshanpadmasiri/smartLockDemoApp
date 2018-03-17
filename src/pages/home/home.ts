@@ -68,6 +68,19 @@ export class HomePage implements AuthListner{
         }
       }
     )
+    this.bluetoothSerial.subscribe('\n').subscribe(
+      res =>{
+        
+        if (res.indexOf('Y')){
+          this.message = 'disconnecting'          
+          this.bluetoothSerial.disconnect()
+        } else {
+          this.message += "refuse to open:" + res + '--';
+        }
+      },
+      error => this.message = "error:" + error,
+      () => this.message = 'finished reading'
+    )
   }
 
   writeBluetooth(message:string){
@@ -85,6 +98,4 @@ export class HomePage implements AuthListner{
       this.authenticated = false;
     }
   }
-
-
 }
