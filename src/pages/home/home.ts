@@ -34,17 +34,11 @@ export class HomePage implements AuthListner{
         }
       }
     )  
-    this.initiateConnection();  
-    firebaseProvider.getDoorKey(this.mac).then(
-      result => {
-        console.log(result);
-        this.message = result;
-      }
-    )
+    this.initiateConnection();      
   }
   
   initiateConnection(){
-    this.bluetoothSerial.connectInsecure('00:21:13:00:3D:68')
+    this.bluetoothSerial.connectInsecure(this.mac)
       .subscribe(
         success=> this.onConnectionSuccess(),
         error => this.message = error,
@@ -65,13 +59,28 @@ export class HomePage implements AuthListner{
   }
 
   initiateHandshake(){
-    this.message = "handshake initiated"
+    this.firebaseProvider.getDoorKey(this.mac).then(
+      key => {
+        if (key !== ''){
+          this.writeBluetooth(key);
+        } else {
+          this.message = key + "invalid key"
+        }
+      }
+    )
+  }
+
+  writeBluetooth(message:string){
+    this.bluetoothSerial.write(message).then(
+      success => this.message = 'successfully written: ' + message,
+      error => this.message = "writing failed due to " +error
+    )
   }
 
   onAuthChange(authState:boolean){
     if(authState){
       this.authenticated = true
-      this.message = 'ready for handshake'
+      this.initiateHandshake();
     } else {
       this.authenticated = false;
     }
