@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
 import { FirebaseProvider } from '../../providers/firebase/firebase'
 import { User } from '../../Models/User';
+
+
 
 /**
  * Generated class for the GrantAccessPage page.
@@ -20,13 +22,22 @@ export class GrantAccessPage {
 
   users:Array<User>
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public firebaseProvider:FirebaseProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public firebaseProvider:FirebaseProvider, public alertCtrl: AlertController) {
     this.users = firebaseProvider.getUsers();
     console.log(this.users);
   }
 
   grantAccess(user:User){
-    this.firebaseProvider.grantTemperoryAccess(user);
+    this.firebaseProvider.grantTemperoryAccess(user).then(
+      sucess => {
+        let alert = this.alertCtrl.create({
+          title: 'Success',
+          subTitle: 'Successfully granted temperory access to ' + user.name,
+          buttons: ['OK']
+        });
+        alert.present();
+      }
+    );
   }
 
   ionViewDidLoad() {
