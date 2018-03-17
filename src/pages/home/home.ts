@@ -33,8 +33,10 @@ export class HomePage implements AuthListner{
           this.message = "false"
         }
       }
-    )  
-    this.initiateConnection();      
+    ) 
+    setInterval(()=>{
+      this.initiateConnection()
+    },1000); 
   }
   
   initiateConnection(){
