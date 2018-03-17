@@ -94,19 +94,26 @@ export class FirebaseProvider {
   }
 
   async getDoorKey(mac:string){
-    await this.updateDoorKey(mac);    
-    return this.doorKey;
-  }
-
-  async updateDoorKey(mac:string){
+    let access_level:string;
+    await this.firestore.collection('users').ref.get().then(snapShot => {
+      snapShot.forEach(doc => {
+        if(doc.data().userId == this.id){
+          access_level = doc.data().access_level;
+        }
+      })
+    })
     await this.firestore.collection('doors').ref.get().then(snapShot => {
       snapShot.forEach(doc => {
         let temp = doc.data();
-        if (temp.mac == mac){          
+        if (temp.mac == mac && temp.access_level == access_level){          
           this.doorKey = temp.auth_key;          
         }
       })
     })
+    return this.doorKey;
   }
+    
+  
+    
 }
 

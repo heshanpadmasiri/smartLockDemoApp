@@ -17,7 +17,7 @@ export class HomePage implements AuthListner{
   message:string;
   authenticated:boolean=false;  
   connected:boolean=false;
-  MACs:Array<string>=['00:21:13:00:3D:68','00:21:13:02:84:C2']
+  MACs:Array<string>=['00:21:13:02:84:C2','00:21:13:00:3D:68']
   index:number=0;
   mac:string;
 
