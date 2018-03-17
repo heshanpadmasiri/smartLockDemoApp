@@ -14,14 +14,14 @@ import { AuthListner } from '../../Models/AuthListner';
 })
 export class HomePage implements AuthListner{
 
-  message;
-  authenticated:Promise<Boolean>
+  message:string;
+  authenticated:boolean=false;  
 
   constructor(public navCtrl: NavController,
               public firebaseProvider: FirebaseProvider,
-              private authProvider:AuthProvider) {
-    this.authProvider.registerListner(this);
-    this.authProvider.authenticate();
+              private authProvider:AuthProvider,
+              private bluetoothSerial:BluetoothSerial) {
+    this.authProvider.registerListner(this);    
     this.message = "Awaiting authentication";
     firebaseProvider.isAttended().then(
       result=>{
@@ -32,16 +32,41 @@ export class HomePage implements AuthListner{
           this.message = "false"
         }
       }
-    )
-    
+    )  
+    this.initiateConnection();  
   }
   
+  initiateConnection(){
+    this.bluetoothSerial.connectInsecure('00:21:13:00:3D:68')
+      .subscribe(
+        success=> this.onConnectionSuccess(),
+        error => this.message = error,
+        () => this.message='completed'
+      );
+  }
+
+  onConnectionSuccess(){
+    this.firebaseProvider.isAttended().then(
+      result => {
+        if (result){
+          this.initiateHandshake()
+        } else {
+          this.authProvider.authenticate();
+        }
+      }
+    )
+  }
+
+  initiateHandshake(){
+    this.message = "handshake initiated"
+  }
 
   onAuthChange(authState:boolean){
     if(authState){
-      this.message = "Authenticated";
+      this.authenticated = true
+      this.message = 'ready for handshake'
     } else {
-      this.message = "Authentication failed";
+      this.authenticated = false;
     }
   }
 
