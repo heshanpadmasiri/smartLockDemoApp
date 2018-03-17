@@ -31,7 +31,7 @@ export class FirebaseProvider {
         let temp = doc.data();
         
         if (temp.userId != this.id){
-          var newUser = new User(temp.name,temp.access_level,temp.img);
+          var newUser = new User(temp.name,temp.access_level,temp.img,temp.userId);
           console.log(temp.name);
           console.log(newUser);
           userArray.push(newUser);
@@ -47,8 +47,8 @@ export class FirebaseProvider {
   }
 
   async updateAttendace(){    
-    await this.firestore.collection('users').ref.get().then(snapShoht => {
-      snapShoht.forEach(doc => {
+    await this.firestore.collection('users').ref.get().then(snapShot => {
+      snapShot.forEach(doc => {
         let temp = doc.data();        
         if (temp.userId == this.id){          
           this.attendent = temp.current_attendance;
@@ -64,7 +64,28 @@ export class FirebaseProvider {
     })     
   }
 
-
+  async grantTemperoryAccess(other:User){
+    let access_level:string;
+    await this.firestore.collection('users').ref.get().then(snapShot => {
+      snapShot.forEach(doc =>{
+        let temp = doc.data();
+        if (temp.userId == this.id){
+          access_level = temp.access_level;
+        }
+      })
+    });
+    this.firestore.collection('users').ref.get().then(snapShot => {
+      snapShot.forEach(doc =>{
+        let temp = doc.data();
+        if (temp.userId == other.id){
+          let data = {
+            temp_access:access_level
+          }
+          doc.ref.update(data);
+        }
+      })
+    });
+  }
 
   async isAttended(){
     await this.updateAttendace();

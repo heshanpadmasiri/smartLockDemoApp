@@ -15,7 +15,7 @@
 
 <ion-content padding>    
     <ion-list *ngFor="let user of users">
-        <ion-item>
+        <ion-item (click)="grantAccess(user)">
           <ion-avatar item-start>
             <img src="{{user.img}}">
           </ion-avatar>

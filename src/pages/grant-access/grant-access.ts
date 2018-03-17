@@ -25,6 +25,10 @@ export class GrantAccessPage {
     console.log(this.users);
   }
 
+  grantAccess(user:User){
+    this.firebaseProvider.grantTemperoryAccess(user);
+  }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad GrantAccessPage');
   }
