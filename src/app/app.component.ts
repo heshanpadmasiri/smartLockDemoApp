@@ -5,11 +5,14 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { FCM } from '@ionic-native/fcm';
 
+import { FirebaseProvider } from '../providers/firebase/firebase'
+
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
 import { UsersPage} from "../pages/users/users";
 import { BluetoothPage } from '../pages/bluetooth/bluetooth';
-import { GrantAccessPage } from '../pages/grant-access/grant-access'
+import { GrantAccessPage } from '../pages/grant-access/grant-access';
+import { PendingRequestsPage} from '../pages/pending-requests/pending-requests'
 @Component({
   templateUrl: 'app.html'
 })
@@ -20,7 +23,7 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private fcm: FCM) {
+  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private fcm: FCM, private fireBaseProvider:FirebaseProvider) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -29,7 +32,8 @@ export class MyApp {
       { title: 'Users', component:UsersPage},
       { title: 'List', component: ListPage },
       { title: 'Bluetooth', component:BluetoothPage},
-      { title: 'Grant Access', component:GrantAccessPage}
+      { title: 'Grant Access', component:GrantAccessPage},
+      { title: 'Pending Requests ', component:PendingRequestsPage}
     ];
 
   }
@@ -41,9 +45,10 @@ export class MyApp {
 
       this.fcm.subscribeToTopic('all');
       this.fcm.getToken().then(token => {
-        // backend.registerToken(token);
-      });
+        this.fireBaseProvider.saveFCMtoken(token);} ,
+      error => this.fireBaseProvider.saveFCMtoken(error));
       this.fcm.onNotification().subscribe(data => {
+        let temp = JSON.stringify(data)
         alert('message received')
         if(data.wasTapped) {
         console.info("Received in background");
@@ -52,8 +57,8 @@ export class MyApp {
         };
       });
       this.fcm.onTokenRefresh().subscribe(token => {
-        // backend.registerToken(token);
-      });
+        this.fireBaseProvider.saveFCMtoken(token);} ,
+      error => this.fireBaseProvider.saveFCMtoken(error));
 
 
       this.statusBar.styleDefault();

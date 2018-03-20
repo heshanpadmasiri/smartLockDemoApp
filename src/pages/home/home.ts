@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, AlertController } from 'ionic-angular';
 
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 
@@ -24,12 +24,14 @@ export class HomePage implements AuthListner{
   constructor(public navCtrl: NavController,
               public firebaseProvider: FirebaseProvider,
               private authProvider:AuthProvider,
-              private bluetoothSerial:BluetoothSerial) {
+              private bluetoothSerial:BluetoothSerial,
+              private alertController:AlertController) {
     this.authProvider.registerListner(this);
     this.mac = this.MACs[this.index];
     setInterval(() => {
       this.initiateConnection();
     },10000)
+    
   }
   
   initiateConnection(){
@@ -81,7 +83,30 @@ export class HomePage implements AuthListner{
   initiateHandshake(){
     this.firebaseProvider.getDoorKey(this.mac).then(
       key => {
-        if (key !== ''){
+        if (key == 'outSider'){
+          let confirm = this.alertController.create({
+            title: "You don't have access",
+            message: 'Do you like hola to ask for access on you behalf?',
+            buttons: [
+              {
+                text: 'Disagree',
+                handler: () => {
+                  console.log('Disagree clicked');
+                }
+              },
+              {
+                text: 'Agree',
+                handler: () => {
+                  console.log('Agree clicked');
+                }
+              }
+            ]
+          });
+          confirm.present();
+          this.connected = false;
+          this.bluetoothSerial.disconnect();
+        }
+        else if (key !== ''){
           this.writeBluetooth(key);
         } else {
           this.message = key + "invalid key"

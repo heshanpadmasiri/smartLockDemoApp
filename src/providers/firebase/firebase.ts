@@ -12,8 +12,9 @@ import { User } from '../../Models/User'
 */
 @Injectable()
 export class FirebaseProvider {
-  id:string = '1' // change this for different users
-
+  id:string = '2' // change this for different users
+  defaultId:string = '1'
+  appToken:any;
   doorKey:string;
 
   firestore:AngularFirestore;
@@ -87,21 +88,57 @@ export class FirebaseProvider {
     });
   }
 
+  saveFCMtoken(token){
+    this.appToken = token;
+    this.firestore.collection('users').ref.get().then(snapShot => {
+      snapShot.forEach(doc =>{
+        let temp = doc.data();
+        if (temp.userId == this.id){
+          let data = {
+            token:token
+          }
+          doc.ref.update(data);
+        }
+      })
+    });
+  }
+
   async isAttended(){
     await this.updateAttendace();
-
     return this.attendent;
   }
 
+  async requestAccess(){
+    await this.firestore.collection('users').ref.get().then(snapShot => {
+      snapShot.forEach(doc => {
+        if(doc.data().userId == this.defaultId){
+          let data = {
+            reqToken:this.appToken,
+            approved:false,
+            from:'user2'
+          }
+          doc.ref.update(data);
+        }
+      })
+    });
+  }
+
+  getPendingRequests(){
+    return new User("user2","none","assets/imgs/person-flat.png","none");
+  }
+
   async getDoorKey(mac:string){
-    let access_level:string;
+    let access_level:string = 'outSider';
     await this.firestore.collection('users').ref.get().then(snapShot => {
       snapShot.forEach(doc => {
         if(doc.data().userId == this.id){
+          if(doc.data().outSider === true){
+            return access_level;
+          }
           access_level = doc.data().access_level;
         }
       })
-    })
+    });   
     await this.firestore.collection('doors').ref.get().then(snapShot => {
       snapShot.forEach(doc => {
         let temp = doc.data();
@@ -109,11 +146,22 @@ export class FirebaseProvider {
           this.doorKey = temp.auth_key;          
         }
       })
-    })
+    });
     return this.doorKey;
   }
-    
   
+  approveRequest(){
+    this.firestore.collection('users').ref.get().then(snapShot => {
+      snapShot.forEach(doc => {
+        if(doc.data().userId == this.id){
+          let data = {
+            approved:true
+          };
+          doc.data().ref().update(data);
+        }
+      })
+    });   
+  }
     
 }
 

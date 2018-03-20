@@ -17,6 +17,7 @@ import { UsersPage} from "../pages/users/users";
 import { ListPage } from '../pages/list/list';
 import { BluetoothPage } from '../pages/bluetooth/bluetooth';
 import { GrantAccessPage } from '../pages/grant-access/grant-access';
+import { PendingRequestsPage} from '../pages/pending-requests/pending-requests';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -39,7 +40,8 @@ const firebaseConfig = {
     ListPage,
     UsersPage,
     BluetoothPage,
-    GrantAccessPage
+    GrantAccessPage,
+    PendingRequestsPage
   ],
   imports: [
     BrowserModule,
@@ -55,7 +57,8 @@ const firebaseConfig = {
     ListPage,
     UsersPage,
     BluetoothPage,
-    GrantAccessPage
+    GrantAccessPage,
+    PendingRequestsPage
   ],
   providers: [
     StatusBar,
