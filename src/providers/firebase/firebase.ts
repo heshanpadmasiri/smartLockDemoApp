@@ -12,8 +12,8 @@ import { User } from '../../Models/User'
 */
 @Injectable()
 export class FirebaseProvider {
-  id:string = '2' // change this for different users
-  defaultId:string = '1'
+  id:string = '1'; // change this for different users
+  defaultId:string = '1';
   appToken:any;
   doorKey:string;
 
@@ -30,13 +30,13 @@ export class FirebaseProvider {
     this.firestore.collection('users').ref.get().then(snapShot =>{
       snapShot.forEach(doc => {
         let temp = doc.data();
-        
+
         if (temp.userId != this.id){
           var newUser = new User(temp.name,temp.access_level,temp.img,temp.userId);
           console.log(temp.name);
           console.log(newUser);
           userArray.push(newUser);
-        }        
+        }
       });
       //console.log(userArray);
 
@@ -47,11 +47,11 @@ export class FirebaseProvider {
     return userArray;
   }
 
-  async updateAttendace(){    
+  async updateAttendace(){
     await this.firestore.collection('users').ref.get().then(snapShot => {
       snapShot.forEach(doc => {
-        let temp = doc.data();        
-        if (temp.userId == this.id){          
+        let temp = doc.data();
+        if (temp.userId == this.id){
           this.attendent = temp.current_attendance;
           if (!temp.current_attendance){
             // mark him as present
@@ -60,9 +60,9 @@ export class FirebaseProvider {
             }
             doc.ref.update(data);
           }
-        }        
-      });      
-    })     
+        }
+      });
+    })
   }
 
   async grantTemperoryAccess(other:User){
@@ -123,8 +123,48 @@ export class FirebaseProvider {
     });
   }
 
-  getPendingRequests(){
-    return new User("user2","none","assets/imgs/person-flat.png","none");
+  async getPendingRequestName(){
+    this.firestore.collection('users').doc(this.id).ref.get()
+      .then(
+      doc => {
+        if (!doc.data().approved){
+          return doc.data().name;
+        } else {
+          return null;
+        }
+      }
+    )
+      .catch(
+        err => {
+          return null;
+        }
+      )
+  }
+
+
+  async getPendingRequests():Promise<any>{
+    let pendingUser:User;
+    // get the name of the pending user
+    this.getPendingRequestName().then(
+      name =>{
+        if (name != null){
+          // we have an pending request from the name
+          this.firestore.collection('users').ref.get()
+            .then(
+            snapShot => {
+              snapShot.forEach( doc => {
+                if (doc.data().name == name){
+                  let temp = doc.data();
+                  pendingUser = new User(temp.name,temp.access_level,temp.img,temp.id);
+                }
+              })
+            }
+          )
+        }
+      }
+    ).then(() => {
+        return pendingUser;
+    });
   }
 
   async getDoorKey(mac:string){
@@ -134,16 +174,16 @@ export class FirebaseProvider {
         if(doc.data().userId == this.id){
           if(doc.data().outSider !== true){
             access_level = doc.data().access_level;
-          }          
+          }
         }
       })
-    });  
+    });
     if (access_level !== 'outSider'){
       await this.firestore.collection('doors').ref.get().then(snapShot => {
         snapShot.forEach(doc => {
           let temp = doc.data();
-          if (temp.mac == mac && temp.access_level == access_level){          
-            this.doorKey = temp.auth_key;          
+          if (temp.mac == mac && temp.access_level == access_level){
+            this.doorKey = temp.auth_key;
           }
         })
       });
@@ -151,9 +191,9 @@ export class FirebaseProvider {
     } else {
       return access_level;
     }
-    
+
   }
-  
+
   approveRequest(){
     this.firestore.collection('users').ref.get().then(snapShot => {
       snapShot.forEach(doc => {
@@ -164,8 +204,8 @@ export class FirebaseProvider {
           doc.data().ref().update(data);
         }
       })
-    });   
+    });
   }
-    
+
 }
 

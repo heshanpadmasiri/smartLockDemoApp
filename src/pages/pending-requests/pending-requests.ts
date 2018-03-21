@@ -17,10 +17,19 @@ import { User } from '../../Models/User';
   templateUrl: 'pending-requests.html',
 })
 export class PendingRequestsPage {
-  request:User
+  request:User;
+  pending:boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private firebaseProvider:FirebaseProvider) {
-    this.request = this.firebaseProvider.getPendingRequests();
+    this.firebaseProvider.getPendingRequests().then(
+      pendingRequest => {
+        if (pendingRequest != undefined || pendingRequest != null){
+          this.request = <User>pendingRequest;
+          this.pending = true;
+        }
+      }
+    );
+
   }
 
   grantAccess(){
@@ -28,7 +37,7 @@ export class PendingRequestsPage {
   }
 
   ionViewDidLoad(){
-    
+
   }
 
 }
