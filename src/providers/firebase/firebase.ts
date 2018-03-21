@@ -128,7 +128,8 @@ export class FirebaseProvider {
     await this.firestore.collection('users').ref.get()
       .then(snapShot => {
         snapShot.forEach(doc => {
-          if(doc.data().userId == this.id){
+          if(doc.data().userId == this.id && !doc.data().approved){
+            console.log(doc.data().approved);
             name = doc.data().from;
           }
         })
@@ -187,17 +188,20 @@ export class FirebaseProvider {
 
   }
 
-  approveRequest(){
-    this.firestore.collection('users').ref.get().then(snapShot => {
+  async approveRequest():Promise<any>{
+    await this.firestore.collection('users').ref.get().then(snapShot => {
       snapShot.forEach(doc => {
         if(doc.data().userId == this.id){
           let data = {
             approved:true
           };
-          doc.data().ref().update(data);
+          doc.ref.update(data);
+          console.log('updated');
+          return true;
         }
       })
     });
+    return false;
   }
 
 }

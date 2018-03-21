@@ -21,19 +21,29 @@ export class PendingRequestsPage {
   pending:boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,private firebaseProvider:FirebaseProvider) {
+    this.updatePending();
+  }
+
+  async updatePending(){
+    console.log('updating pending');
     this.firebaseProvider.getPendingRequests().then(
       pendingRequest => {
         if (pendingRequest != undefined || pendingRequest != null){
           this.request = <User>pendingRequest;
           this.pending = true;
+        } else {
+          this.pending = false;
         }
       }
     );
-
   }
 
-  grantAccess(){
-    this.firebaseProvider.approveRequest();
+  async grantAccess(){
+    this.firebaseProvider.approveRequest().then(
+      (result)=>{
+        this.updatePending();
+      }
+    );
   }
 
   ionViewDidLoad(){
