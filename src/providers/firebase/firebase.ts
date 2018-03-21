@@ -123,48 +123,41 @@ export class FirebaseProvider {
     });
   }
 
-  async getPendingRequestName(){
-    this.firestore.collection('users').doc(this.id).ref.get()
-      .then(
-      doc => {
-        if (!doc.data().approved){
-          return doc.data().name;
-        } else {
-          return null;
-        }
-      }
-    )
-      .catch(
-        err => {
-          return null;
-        }
-      )
+  async getPendingRequestName():Promise<string>{
+    let name:string;
+    await this.firestore.collection('users').ref.get()
+      .then(snapShot => {
+        snapShot.forEach(doc => {
+          if(doc.data().userId == this.id){
+            name = doc.data().from;
+          }
+        })
+      })
+    console.log(name);
+    return name;
   }
 
 
   async getPendingRequests():Promise<any>{
     let pendingUser:User;
     // get the name of the pending user
-    this.getPendingRequestName().then(
-      name =>{
-        if (name != null){
-          // we have an pending request from the name
-          this.firestore.collection('users').ref.get()
-            .then(
-            snapShot => {
-              snapShot.forEach( doc => {
-                if (doc.data().name == name){
-                  let temp = doc.data();
-                  pendingUser = new User(temp.name,temp.access_level,temp.img,temp.id);
-                }
-              })
+    let name:string
+    await this.getPendingRequestName()
+      .then(recieved => name = recieved);
+    console.log('recieved name:'+name);
+    if(name != undefined || name != null){
+      await this.firestore.collection('users').ref.get()
+        .then(snapShot => {
+          snapShot.forEach(doc => {
+            if(doc.data().name == name){
+              let temp = doc.data();
+              pendingUser = new User(temp.name,temp.access_level,temp.img,temp.id);
+              console.log(pendingUser);
             }
-          )
-        }
-      }
-    ).then(() => {
-        return pendingUser;
-    });
+          })
+        })
+    }
+    return pendingUser;
   }
 
   async getDoorKey(mac:string){

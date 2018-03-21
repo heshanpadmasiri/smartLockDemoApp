@@ -47,25 +47,27 @@ export class MyApp {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
+      if(this.platform.is('cordova')){
+        this.fcm.subscribeToTopic('all');
+        this.fcm.getToken().then(token => {
+          this.fireBaseProvider.saveFCMtoken(token);} ,
+        error => this.fireBaseProvider.saveFCMtoken(error));
+        this.fcm.onNotification().subscribe(data => {
+          let temp = JSON.stringify(data)
+          // Todo: Change this to a proper alert message
+          alert('message received')
+          if(data.wasTapped) {
+          console.info("Received in background");
+          } else {
+          console.info("Received in foreground");
+          };
+        });
+        this.fcm.onTokenRefresh().subscribe(token => {
+          this.fireBaseProvider.saveFCMtoken(token);} ,
+        error => this.fireBaseProvider.saveFCMtoken(error));
 
-      this.fcm.subscribeToTopic('all');
-      this.fcm.getToken().then(token => {
-        this.fireBaseProvider.saveFCMtoken(token);} ,
-      error => this.fireBaseProvider.saveFCMtoken(error));
-      this.fcm.onNotification().subscribe(data => {
-        let temp = JSON.stringify(data)
-        // Todo: Change this to a proper alert message
-        alert('message received')
-        if(data.wasTapped) {
-        console.info("Received in background");
-        } else {
-        console.info("Received in foreground");
-        };
-      });
-      this.fcm.onTokenRefresh().subscribe(token => {
-        this.fireBaseProvider.saveFCMtoken(token);} ,
-      error => this.fireBaseProvider.saveFCMtoken(error));
-
+      }
+      
 
       this.statusBar.styleDefault();
       this.splashScreen.hide();

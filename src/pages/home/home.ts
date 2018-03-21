@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavController, AlertController, Platform } from 'ionic-angular';
 
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 
@@ -25,12 +25,18 @@ export class HomePage implements AuthListner{
               public firebaseProvider: FirebaseProvider,
               private authProvider:AuthProvider,
               private bluetoothSerial:BluetoothSerial,
-              private alertController:AlertController) {
-    this.authProvider.registerListner(this);
-    this.mac = this.MACs[this.index];
-    setInterval(() => {
-      this.initiateConnection();
-    },10000)
+              private alertController:AlertController,
+              private platform:Platform) {
+    if(this.platform.is('cordova')){
+      this.authProvider.registerListner(this);
+      this.mac = this.MACs[this.index];
+      setInterval(() => {
+        this.initiateConnection();
+      },10000)
+    } else {
+      console.log('running in browser');
+    }
+    
     
   }
   
