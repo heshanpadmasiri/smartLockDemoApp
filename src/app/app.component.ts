@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
@@ -23,7 +23,12 @@ export class MyApp {
 
   pages: Array<{title: string, component: any}>;
 
-  constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, private fcm: FCM, private fireBaseProvider:FirebaseProvider) {
+  constructor(public platform: Platform, 
+      public statusBar: StatusBar, 
+      public splashScreen: SplashScreen, 
+      private fcm: FCM, 
+      private fireBaseProvider:FirebaseProvider,
+      private alertController:AlertController) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
@@ -49,6 +54,7 @@ export class MyApp {
       error => this.fireBaseProvider.saveFCMtoken(error));
       this.fcm.onNotification().subscribe(data => {
         let temp = JSON.stringify(data)
+        // Todo: Change this to a proper alert message
         alert('message received')
         if(data.wasTapped) {
         console.info("Received in background");

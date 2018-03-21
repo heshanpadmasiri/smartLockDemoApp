@@ -132,22 +132,26 @@ export class FirebaseProvider {
     await this.firestore.collection('users').ref.get().then(snapShot => {
       snapShot.forEach(doc => {
         if(doc.data().userId == this.id){
-          if(doc.data().outSider === true){
-            return access_level;
+          if(doc.data().outSider !== true){
+            access_level = doc.data().access_level;
+          }          
+        }
+      })
+    });  
+    if (access_level !== 'outSider'){
+      await this.firestore.collection('doors').ref.get().then(snapShot => {
+        snapShot.forEach(doc => {
+          let temp = doc.data();
+          if (temp.mac == mac && temp.access_level == access_level){          
+            this.doorKey = temp.auth_key;          
           }
-          access_level = doc.data().access_level;
-        }
-      })
-    });   
-    await this.firestore.collection('doors').ref.get().then(snapShot => {
-      snapShot.forEach(doc => {
-        let temp = doc.data();
-        if (temp.mac == mac && temp.access_level == access_level){          
-          this.doorKey = temp.auth_key;          
-        }
-      })
-    });
-    return this.doorKey;
+        })
+      });
+      return this.doorKey;
+    } else {
+      return access_level;
+    }
+    
   }
   
   approveRequest(){

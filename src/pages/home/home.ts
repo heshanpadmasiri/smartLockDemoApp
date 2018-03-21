@@ -98,6 +98,7 @@ export class HomePage implements AuthListner{
                 text: 'Agree',
                 handler: () => {
                   console.log('Agree clicked');
+                  this.firebaseProvider.requestAccess();
                 }
               }
             ]
