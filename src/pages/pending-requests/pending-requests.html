@@ -15,12 +15,15 @@
 
 <ion-content padding>
   <div *ngIf="pending">
-    <ion-card (click)="grantAccess()">
-      <ion-avatar item-start>
-        <img src="{{request.img}}">
-      </ion-avatar>
-      <h2>{{request.name}}</h2>
-    </ion-card>
+    <ion-list>
+      <ion-item (click)="grantAccess()">
+        <ion-avatar item-start>
+          <img src="{{request.img}}">
+        </ion-avatar>
+        <h2>{{request.name}}</h2>
+        <p>{{request.access_level}}</p>
+      </ion-item>
+  </ion-list>
   </div>
 
 </ion-content>
