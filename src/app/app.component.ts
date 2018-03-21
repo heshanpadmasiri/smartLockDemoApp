@@ -50,22 +50,33 @@ export class MyApp {
       if(this.platform.is('cordova')){
         this.fcm.subscribeToTopic('all');
         this.fcm.getToken().then(token => {
-          this.fireBaseProvider.saveFCMtoken(token);} ,
+        this.fireBaseProvider.saveFCMtoken(token);} ,
         error => this.fireBaseProvider.saveFCMtoken(error));
         this.fcm.onNotification().subscribe(data => {
-          let temp = JSON.stringify(data)
-          // Todo: Change this to a proper alert message
-          alert('message received')
-          if(data.wasTapped) {
-          console.info("Received in background");
-          } else {
-          console.info("Received in foreground");
-          };
+          let alert = this.alertController.create({
+            title: 'Recieved access request from user2',
+            message: 'Do you want to allow user2 access',
+            buttons: [
+              {
+                text: 'Cancel',
+                role: 'cancel',
+                handler: () => {
+                  console.log('Cancel clicked');
+                }
+              },
+              {
+                text: 'Confirm',
+                handler: () => {
+                  this.fireBaseProvider.approveRequest();
+                }
+              }
+            ]
+          });
+          alert.present();
         });
         this.fcm.onTokenRefresh().subscribe(token => {
           this.fireBaseProvider.saveFCMtoken(token);} ,
         error => this.fireBaseProvider.saveFCMtoken(error));
-
       }
       
 
