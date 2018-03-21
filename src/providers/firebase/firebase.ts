@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from 'angularfire2/firestore';
 
 import { User } from '../../Models/User'
-
+import { AlertController } from 'ionic-angular';
 /*
   Generated class for the FirebaseProvider provider.
 
@@ -12,7 +12,7 @@ import { User } from '../../Models/User'
 */
 @Injectable()
 export class FirebaseProvider {
-  id:string = '1'; // change this for different users
+  id:string = '2'; // change this for different users
   defaultId:string = '1';
   appToken:any;
   doorKey:string;
@@ -21,7 +21,8 @@ export class FirebaseProvider {
 
   attendent:boolean;
 
-  constructor(public fs: AngularFirestore) {
+  constructor(public fs: AngularFirestore,
+              private alertController:AlertController) {
     this.firestore = fs;
   }
 
@@ -202,6 +203,46 @@ export class FirebaseProvider {
       })
     });
     return false;
+  }
+
+  async notifyUser(){
+    await this.firestore.doc('users/'+this.id).ref.get().then(doc => {
+      let data = doc.data();
+      if (data.approved === false){
+        // we have a pending request
+        let alert = this.alertController.create({
+          title: 'Recieved access request from ' + data.from,
+          message: 'Do you want to allow '+ data.from +' access',
+          buttons: [
+            {
+              text: 'Cancel',
+              role: 'cancel',
+              handler: () => {
+                console.log('Cancel clicked');
+              }
+            },
+            {
+              text: 'Confirm',
+              handler: () => {
+                this.approveRequest();
+              }
+            }
+          ]
+        });
+        alert.present();
+      } else if(data.awaiting_access === true){
+        let alert = this.alertController.create({
+          title: 'Access Granted',
+          subTitle: 'You have been granted guest access',
+          buttons: ['Ok']
+        });
+        alert.present();
+        let new_data = {
+          awaiting_access:false
+        };
+        doc.ref.update(new_data)
+      }
+    })
   }
 
 }

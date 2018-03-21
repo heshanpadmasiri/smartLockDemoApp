@@ -53,26 +53,7 @@ export class MyApp {
         this.fireBaseProvider.saveFCMtoken(token);} ,
         error => this.fireBaseProvider.saveFCMtoken(error));
         this.fcm.onNotification().subscribe(data => {
-          let alert = this.alertController.create({
-            title: 'Recieved access request from user2',
-            message: 'Do you want to allow user2 access',
-            buttons: [
-              {
-                text: 'Cancel',
-                role: 'cancel',
-                handler: () => {
-                  console.log('Cancel clicked');
-                }
-              },
-              {
-                text: 'Confirm',
-                handler: () => {
-                  this.fireBaseProvider.approveRequest();
-                }
-              }
-            ]
-          });
-          alert.present();
+          this.fireBaseProvider.notifyUser();
         });
         this.fcm.onTokenRefresh().subscribe(token => {
           this.fireBaseProvider.saveFCMtoken(token);} ,
