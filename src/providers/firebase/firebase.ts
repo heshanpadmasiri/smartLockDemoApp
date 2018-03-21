@@ -119,6 +119,11 @@ export class FirebaseProvider {
             from:'user2'
           }
           doc.ref.update(data);
+        } else if(doc.data().userId == this.id){
+          let data = {
+            awaiting_access:true
+          }
+          doc.ref.update(data);
         }
       })
     });
