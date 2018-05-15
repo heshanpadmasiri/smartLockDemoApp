@@ -37,7 +37,7 @@ export class HomePage implements AuthListner{
       console.log('running in browser');
       firebaseProvider.notifyUser();
     }
-    
+    this.message = 'running in browser';
     
   }
   
