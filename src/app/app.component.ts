@@ -35,7 +35,6 @@ export class MyApp {
     this.pages = [
       { title: 'Home', component: HomePage },
       { title: 'Users', component:UsersPage},
-      { title: 'List', component: ListPage },
       { title: 'Bluetooth', component:BluetoothPage},
       { title: 'Grant Access', component:GrantAccessPage},
       { title: 'Pending Requests ', component:PendingRequestsPage}
